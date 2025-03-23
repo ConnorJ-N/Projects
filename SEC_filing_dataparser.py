@@ -4,49 +4,67 @@ import sqlite3
 class DataParser():
     def __init__(self, data, tag, ddate, qtr, segment=None, company=None):
         
-        self.conn = sqlite3.connect(":memory:")
-        self.data = data.to_sql("my_table", self.conn, if_exists="replace", index=False)
+        if data is not None:
+            self.conn = sqlite3.connect(":memory:")
+            self.data = data.to_sql("my_table", self.conn, if_exists="replace", index=False)
         self.tag = tag
         self.segment = segment
         self.ddates = [ddate] if not isinstance(ddate, list) else ddate  
         self.qtr = qtr
         self.company = company
     
-    def filter_data(self, segment_avg=False, segment_add=False):
-        """Apply SQL filtering based on provided parameters"""
-        query = "SELECT name, segments, value FROM my_table WHERE tag = ? AND qtrs = ?"
-        params = [self.tag, self.qtr]
+    def build_query(self, segment_avg=False, segment_add=False, segment_max=False):
         
-        placeholders = ",".join(["?"] * len(self.ddates))  
-        query += f" AND ddate IN ({placeholders})"
+        """Build dynamic query based on parameters"""
+        base_query = "SELECT name, ddate, value"
+        group_by = "GROUP BY name, ddate"
+        where_conditions = ["tag = ?", "qtrs = ?"]
+        params = [self.tag, self.qtr]
+
+        # Handle ddate filter (if provided)
+        placeholders = ",".join(["?"] * len(self.ddates))
+        where_conditions.append(f"ddate IN ({placeholders})")
         params.extend(self.ddates)
 
-        if self.segment:
-            query += " AND segments = ?"
+        # Handle segment filter
+        if self.segment == "null":
+            where_conditions.append("segments IS NULL")
+        else:
+            where_conditions.append("segments = ?")
             params.append(self.segment)
-            
-        if segment_avg:
-            query = f"""
-            SELECT name, AVG(value) AS average_value
-            FROM my_table
-            WHERE tag = ? AND qtrs = ? AND ddate IN ({placeholders})
-            GROUP BY name
-            """
-            params = [self.tag, self.qtr] + self.ddates
-        
-        if segment_add:
-           query = f"""
-           SELECT name, SUM(value) AS total_value
-           FROM my_table
-           WHERE tag = ? AND qtrs = ? AND ddate IN ({placeholders})
-           GROUP BY name
-           """
-           params = [self.tag, self.qtr] + self.ddates
 
+        # Handle company filter (if provided)
         if self.company:
-            query += " AND name = ?"
+            where_conditions.append("name = ?")
             params.append(self.company)
+        
+        # Handle aggregation types: avg, sum, max
+        if segment_avg:
+            base_query = f"""
+            SELECT name, ddate, value, AVG(value) AS average_value
+            """
+        elif segment_add:
+            base_query = f"""
+            SELECT name, ddate, value, SUM(value) AS total_value
+            """
+        elif segment_max:
+            base_query = f"""
+            SELECT name, ddate, value, MAX(value) AS max_value
+            """
+        
+        # Combine everything into a single query
+        where_clause = " AND ".join(where_conditions)
+        print(where_clause, "where clause")
+        final_query = f"{base_query} FROM my_table WHERE {where_clause} {group_by}"
+        print(final_query, "Final clause")
 
+        return final_query, params
+    
+    def filter_data(self, segment_avg=False, segment_add=False, segment_max=False):
+        """Execute dynamically generated query"""
+        query, params = self.build_query(segment_avg, segment_add, segment_max)
+        
+        # Execute the query and return results
         return pd.read_sql(query, self.conn, params=params)
 
     def close(self):
