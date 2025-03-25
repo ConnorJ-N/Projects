@@ -16,47 +16,42 @@ class DataParser():
     def build_query(self, segment_avg=False, segment_add=False, segment_max=False):
         
         """Build dynamic query based on parameters"""
-        base_query = "SELECT name, ddate, value"
+        base_query = "SELECT name, ddate, segments, value"
         group_by = "GROUP BY name, ddate"
         where_conditions = ["tag = ?", "qtrs = ?"]
         params = [self.tag, self.qtr]
 
-        # Handle ddate filter (if provided)
         placeholders = ",".join(["?"] * len(self.ddates))
         where_conditions.append(f"ddate IN ({placeholders})")
         params.extend(self.ddates)
 
-        # Handle segment filter
         if self.segment == "null":
             where_conditions.append("segments IS NULL")
-        else:
+        elif self.segment:
             where_conditions.append("segments = ?")
             params.append(self.segment)
+        else:
+            pass
 
-        # Handle company filter (if provided)
         if self.company:
             where_conditions.append("name = ?")
             params.append(self.company)
         
-        # Handle aggregation types: avg, sum, max
         if segment_avg:
             base_query = f"""
-            SELECT name, ddate, value, AVG(value) AS average_value
+            SELECT name, ddate, segments, value, AVG(value) AS average_value
             """
-        elif segment_add:
+        if segment_add:
             base_query = f"""
-            SELECT name, ddate, value, SUM(value) AS total_value
+            SELECT name, ddate, segments, value, SUM(value) AS total_value
             """
-        elif segment_max:
+        if segment_max:
             base_query = f"""
-            SELECT name, ddate, value, MAX(value) AS max_value
+            SELECT name, ddate, segments, value, MAX(value) AS max_value
             """
         
-        # Combine everything into a single query
         where_clause = " AND ".join(where_conditions)
-        print(where_clause, "where clause")
         final_query = f"{base_query} FROM my_table WHERE {where_clause} {group_by}"
-        print(final_query, "Final clause")
 
         return final_query, params
     
@@ -64,7 +59,6 @@ class DataParser():
         """Execute dynamically generated query"""
         query, params = self.build_query(segment_avg, segment_add, segment_max)
         
-        # Execute the query and return results
         return pd.read_sql(query, self.conn, params=params)
 
     def close(self):
