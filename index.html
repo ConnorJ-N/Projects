@@ -3,36 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Interactive Graphs</title>
+    <title>Nature-Inspired Data Dashboard</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap">
     <style>
+        /* General Styling */
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Poppins', sans-serif;
+            background: #eaf4e6;
+            color: #2e4a3b;
+            margin: 0;
+            padding: 0;
             text-align: center;
         }
+
+        /* Header */
+        .header {
+            background: linear-gradient(to right, #a8e6cf, #dcedc1);
+            padding: 40px;
+            border-bottom-left-radius: 50% 20px;
+            border-bottom-right-radius: 50% 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 400;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+
+        /* Sections */
+        .section {
+            margin: 50px auto;
+            max-width: 900px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .section:hover {
+            transform: scale(1.02);
+        }
+
+        /* Graph Containers */
         .graph-container {
-            margin: 30px auto;
-            width: 80%;
-            height: 1000px;
+            width: 100%;
+            height: 800px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(0, 128, 0, 0.05);
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
             border: 1px solid #ddd;
-            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #88bdbc;
+            color: white;
+            font-weight: 400;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            background: linear-gradient(to right, #a8e6cf, #dcedc1);
+            border-top-left-radius: 50% 20px;
+            border-top-right-radius: 50% 20px;
+            box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
 
-    <h1>Welcome to my Projects page</h1>
-    <p>This page contains interactive graphs and explanations.</p>
+    <!-- Header Section -->
+    <div class="header">
+        <h1>A Dashboard showcasing some analytics of company information from SEC data listings</h1>
+    </div>
 
-    <!-- First Graph -->
-    <h2>Graph 1: Clustering t-SNE reduced dimensionality company financial information</h2>
-    <p>This graph represents the clustering of features after dimensionality reduction using t-SNE.</p>
-    <iframe class="graph-container" src="graph1.html"></iframe>
+    <!-- First Graph Section -->
+    <div class="section">
+        <h2>🌳 t-SNE clustered company financial information</h2>
+        <p>Company information was cleaned to remove nan values, before minmax scaling and dimensionality reduction using t-SNE. K-Means clustering was then done with k=6</p>
+        <div class="graph-container">
+            <iframe src="graph1.html"></iframe>
+        </div>
+    </div>
 
-    <!-- Second Graph -->
-    <h2>Graph 2: Another Data Visualization</h2>
-    <p>Here is another cool data visualization.</p>
-    <iframe class="graph-container" src="graph2.html"></iframe>
+    <!-- Table Section -->
+    <div class="section">
+        <h2>Placeholder</h2>
+        <p>A peaceful overview of the key numbers.</p>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>🌱 New Users</td>
+                <td>Value</td>
+            </tr>
+            <tr>
+                <td>🌿 Revenue</td>
+                <td>Value</td>
+            </tr>
+            <tr>
+                <td>🌸 Growth Rate</td>
+                <td>Value</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Second Graph Section -->
+    <div class="section">
+        <h2>Placeholder</h2>
+        <p>Placeholder</p>
+        <div class="graph-container">
+            <iframe src="graph2.html"></iframe>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+    </div>
 
 </body>
 </html>
