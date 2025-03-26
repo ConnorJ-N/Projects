@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Table</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#financial-table').DataTable({
+                "paging": false,   // Disable pagination
+                "searching": false, // Remove search bar
+                "info": false,      // Remove "Showing entries" text
+            });
+        });
+    </script>
+    <style>
+        body {
+            background-color: #E8F5E9;
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th {
+            background-color: #1B5E20;
+            color: white;
+            text-align: left;
+            padding: 10px;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #A5D6A7;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: #F1F8E9;
+        }
+    </style>
+</head>
+<body>
+
+<table id="financial-table" class="display">
+    <thead>
+        <tr>
+            <th>Assets</th><th>Common stock value</th><th>Earnings Per Share (Basic)</th><th>Liabilities</th><th>Net income/loss</th><th>Operating income/loss</th><th>Stock holder equity</th><th>Cluster</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>5.14e+08</td><td>2.65e+06</td><td>-1.88e+00</td><td>2.72e+08</td><td>-5.22e+07</td><td>-4.85e+07</td><td>1.34e+07</td><td>0</td></tr><tr><td>3.14e+08</td><td>1.74e+06</td><td>-3.10e+00</td><td>1.84e+08</td><td>-3.96e+07</td><td>-3.53e+07</td><td>-3.38e+08</td><td>1</td></tr><tr><td>1.25e+09</td><td>1.67e+08</td><td>-3.43e-01</td><td>6.61e+08</td><td>-2.34e+07</td><td>-1.28e+07</td><td>5.91e+08</td><td>2</td></tr><tr><td>1.89e+10</td><td>4.12e+08</td><td>4.98e+03</td><td>1.21e+10</td><td>7.37e+08</td><td>8.46e+08</td><td>4.55e+09</td><td>3</td></tr><tr><td>2.61e+07</td><td>3.99e+06</td><td>-1.13e+00</td><td>1.34e+07</td><td>-5.36e+05</td><td>-1.37e+06</td><td>-7.41e+04</td><td>4</td></tr><tr><td>5.00e+07</td><td>2.82e+05</td><td>-4.60e+00</td><td>2.57e+07</td><td>-1.49e+07</td><td>-1.42e+07</td><td>2.20e+07</td><td>5</td></tr>
+    </tbody>
+</table>
+
+</body>
+</html>
